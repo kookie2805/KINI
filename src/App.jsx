@@ -1,21 +1,33 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar'; // Pastikan Navbar ada di folder components
-import HomePage from './components/Home'; // Komponen HomePage Anda
-import CategoryPage from './components/category'; // Komponen CategoryPage yang baru
-import About from './components/About'; // Impor komponen About
+import { useMediaQuery } from 'react-responsive';
+
+// Impor Navbar
+import Navbar from './components/Navbar';
+import MobileNavbar from './components/MobileNavbar';
+
+// Impor Halaman
+import HomePage from './components/Home';
+import CategoryPage from './components/category';
+import About from './components/About';
+import CheckoutPage from './components/checkout';
 
 const App = () => {
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' }); // Deteksi perangkat mobile
+
   return (
     <Router>
-      {/* Render Navbar di semua halaman */}
-      <Navbar />
-      
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/category" element={<CategoryPage />} />
-        <Route path="/about" element={<About />} /> {/* Tambahkan rute untuk halaman About */}
-      </Routes>
+      {/* Navbar berbeda berdasarkan perangkat */}
+      {isMobile ? <MobileNavbar /> : <Navbar />}
+
+      <div className={isMobile ? 'mt-16' : 'mt-24'}> {/* Tambahkan margin untuk menghindari tumpang tindih */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/category" element={<CategoryPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+        </Routes>
+      </div>
     </Router>
   );
 };

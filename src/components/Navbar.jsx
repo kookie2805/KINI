@@ -4,7 +4,7 @@ import homeImage from '../assets/Home.png';
 import tasImage from '../assets/Tas.png';
 import contactImage from '../assets/Contact.png';
 import userImage from '../assets/user.png';
-import logoImage from '../assets/logo.png'; // Impor logo image
+import logoImage from '../assets/logo.png'; 
 
 const Navbar = () => {
   return (

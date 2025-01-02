@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -24,6 +25,7 @@ const HomePage = () => {
   const [liked, setLiked] = useState([false, false, false, false, false]);
   const [showCartContainer, setShowCartContainer] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
 
   const handleLikeClick = (index) => {
     const updatedLikes = [...liked];
@@ -35,11 +37,16 @@ const HomePage = () => {
     const newItem = {
       name: productNames[index],
       image: productImages[index],
-      price: productPrices[index], // Menambahkan harga ke item
+      price: productPrices[index],
     };
     setCartItems((prevItems) => [...prevItems, newItem]);
     setShowCartContainer(true);
   };
+
+  const handleCheckout = () => {
+    navigate("/checkout", { state: { cartItems } }); // Kirim data keranjang
+  };
+  
 
   const productImages = [
     pompaImage,
@@ -51,7 +58,7 @@ const HomePage = () => {
 
   const productNames = ["Pompa Air", "Linggis", "Kuas Cat", "Meteran", "Sekop"];
 
-  const productPrices = [15000, 20000, 10000, 25000, 30000]; // Daftar harga untuk setiap produk
+  const productPrices = [15000, 20000, 10000, 25000, 30000];
 
   const imageSizes = [
     { width: "w-[120px]", height: "h-[120px]" },
@@ -66,7 +73,7 @@ const HomePage = () => {
       <div className="flex-1 p-4">
         {/* Konten utama */}
         <div className="flex flex-col text-lg text-gray-800 ml-15 mt-[50px]">
-          <div className="flex items-center mt-[16px] pt-8"> 
+          <div className="flex items-center mt-[16px] pt-8">
             <FontAwesomeIcon icon={faMapMarkerAlt} className="text-black text-2xl ml-7 mr-3" />
             <span className="ml-4 ">Jalan. Peterongan Tengah Raya</span>
           </div>
@@ -135,7 +142,12 @@ const HomePage = () => {
               <span className="text-red-500 font-bold">
                 Total: Rp. {cartItems.reduce((total, item) => total + item.price, 0)}
               </span>
-              <button className="bg-[#955530] text-white px-4 py-2 rounded-[15px] ml-4 hover:bg-[#7a4722] transition duration-300">Booking Pembelian</button>
+              <button
+                className="bg-[#955530] text-white px-4 py-2 rounded-[15px] mt-4 hover:bg-[#7a4722] transition duration-300"
+                onClick={handleCheckout}
+              >
+                Booking Pembelian
+              </button>
             </div>
           </div>
         )}
@@ -152,7 +164,7 @@ const HomePage = () => {
               <h2 className="font-bold text-lg text-gray-800">
                 New Collection
               </h2>
-              <p className="font-bold text-xl text-gray-800">
+              <p className=" font-bold text-xl text-gray-800">
                 Recommendations, <br /> from our shop!
               </p>
             </div>
@@ -182,11 +194,11 @@ const HomePage = () => {
             </div>
             <div className="flex justify-center gap-5 mt-4 -mt-2 category-container ml-[-165px]">
               <div
-  className="w-[80px] h-[75px] bg-[#955530ae] rounded-full flex justify-center items-center text-white font-bold text-sm"
-  style={{ marginRight: "30px" }}
->
-  <img src={kuasImage} alt="Image A" className="w-12 h-12" />
-</div>
+                className="w-[80px] h-[75px] bg-[#955530ae] rounded-full flex justify-center items-center text-white font-bold text-sm"
+                style={{ marginRight: "30px" }}
+              >
+                <img src={kuasImage} alt="Image A" className="w-12 h-12" />
+              </div>
               <div
                 className="w-[80px] h-[75px] bg-[#955530ae] rounded-full flex justify-center items-center text-white font-bold text-sm"
                 style={{ marginRight: "30px" }}
@@ -256,7 +268,7 @@ const HomePage = () => {
                 {productNames[index]}
               </div>
               <div className="text-left mt-1 text-red-500 text-lg font-bold">
-                Rp. {productPrices[index]} {/* Menampilkan harga produk */}
+                Rp. {productPrices[index]}
               </div>
             </div>
           ))}
