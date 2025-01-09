@@ -28,6 +28,7 @@ const Navbar = () => {
         <Link to="/category"><img src={tasImage} alt="Keranjang" className="w-[30px] h-[30px] object-contain" /></Link>
         <Link to="/about"><img src={contactImage} alt="Contact" className="w-[34px] h-[34px] object-contain" /></Link>
         <Link to="#login"><img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" /></Link>
+        <Link to="/AddProduct"><img src={userImage} alt="addpage" className="w-[30px] h-[30px] object-contain" /></Link>
       </nav>
     </div>
   );

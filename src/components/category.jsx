@@ -50,23 +50,20 @@ const CategoryPage = () => {
     { name: "Tang", image: "https://res.cloudinary.com/ddl4sxrb3/image/upload/v1735220054/Tang_hml5cu.png", price: "Rp. 150.000" },
   ];
 
-  // Fungsi untuk menambahkan produk ke keranjang
   const handleAddToCart = (product) => {
     setCartItems((prevItems) => [...prevItems, product]);
     alert(`${product.name} telah ditambahkan ke keranjang.`);
   };
 
-  // Fungsi untuk menangani klik pada tombol like
   const handleLikeClick = (productName) => {
     setLiked((prevLiked) => ({
       ...prevLiked,
-      [productName]: !prevLiked[productName], // Toggle like state
+      [productName]: !prevLiked[productName], 
     }));
   };
 
   return (
     <div className="flex mt-[100px]">
-      {/* Sidebar kategori */}
       <div className="w-[317px] h-[669px] bg-[#dedcdb] rounded-lg shadow-md p-4 ml-0 mb-9 mt-[-50px]">
         <h1 className="text-black text-2xl font-bold mb-4 mt-5">Category</h1>
 
@@ -90,14 +87,12 @@ const CategoryPage = () => {
         </div>
       </div>
 
-      {/* Konten utama */}
       <div className="flex-1 p-5">
         {selectedProduct ? (
           <div className="flex flex-col items-start">
             <h2 className="text-2xl font-bold">{selectedProduct.name}</h2>
             <p className="text-lg text-gray-700 mb-4">{selectedProduct.description}</p>
 
-            {/* Menampilkan produk yang dipilih */}
             <div className="relative w-[200px] mb-6">
               <div className="absolute top-2 right-2 z-10">
                 <FontAwesomeIcon

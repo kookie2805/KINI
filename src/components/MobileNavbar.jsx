@@ -24,6 +24,10 @@ const MobileNavbar = () => {
         <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
         <span className="text-white text-xs">Login</span>
       </Link>
+      <Link to="/AddProduct" className="flex flex-col items-center">
+        <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
+        <span className="text-white text-xs">AddProduct</span>
+      </Link>
     </div>
   );
 };

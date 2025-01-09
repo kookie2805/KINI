@@ -1,10 +1,30 @@
 import React, { useState } from "react";
-import { Settings, Search, ShoppingCart, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMapMarkerAlt,
+  faShoppingCart,
+  faInfoCircle,
+  faHeart,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
+import kapakImage from "../assets/Kapak.png";
+import kuasImage from "../assets/Kuas.png";
+import pakuImage from "../assets/Paku.png";
+import hammerImage from "../assets/Hammer.png";
+import emberImage from "../assets/ember.png";
+import pompaImage from "../assets/Pompa.png";
+import LinggisImage from "../assets/Linggis.png";
+import KuasCatImage from "../assets/KuasCat.png";
+import MeteranImage from "../assets/Meteran.png";
+import SekopImage from "../assets/Sekop.png";
+import Footer from "./footer";
 
 const MobileHomePage = () => {
   const [liked, setLiked] = useState([false, false, false, false, false]);
   const [showCartContainer, setShowCartContainer] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate(); 
 
   const handleLikeClick = (index) => {
     const updatedLikes = [...liked];
@@ -15,7 +35,7 @@ const MobileHomePage = () => {
   const handleAddToCart = (index) => {
     const newItem = {
       name: productNames[index],
-      image: `/api/placeholder/200/200`,
+      image: productImages[index],
       price: productPrices[index],
     };
     setCartItems((prevItems) => [...prevItems, newItem]);
@@ -23,159 +43,116 @@ const MobileHomePage = () => {
   };
 
   const handleCheckout = () => {
-    console.log("Proceeding to checkout with items:", cartItems);
+    navigate("/checkout", { state: { cartItems } }); // Kirim data keranjang
   };
 
+  const productImages = [
+    pompaImage,
+    LinggisImage,
+    KuasCatImage,
+    MeteranImage,
+    SekopImage,
+  ];
+
   const productNames = ["Pompa Air", "Linggis", "Kuas Cat", "Meteran", "Sekop"];
+
   const productPrices = [15000, 20000, 10000, 25000, 30000];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
-        <div className="flex items-center justify-between px-4 py-3">
-          {/* Logo */}
-          <img
-  src="/api/placeholder/128/128"
-  alt="Logo KIOS MINI"
-  className="h-12 w-auto border border-red-500"
-/>
-
-          <div className="flex items-center space-x-3">
-            <Settings className="w-5 h-5 text-gray-600" />
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-28 px-3 py-1 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#955530]"
-              />
-              <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            </div>
-            <ShoppingCart
-              className="w-5 h-5 text-gray-600 cursor-pointer"
+    <div className="flex flex-col min-h-screen bg-white text-sm">
+      <div className="p-2">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            <FontAwesomeIcon
+              icon={faMapMarkerAlt}
+              className="text-black text-base mr-1"
+            />
+            <span className="text-xs">Jalan. Peterongan Tengah Raya</span>
+          </div>
+          <div className="flex items-center">
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              className="text-black text-base mx-1 cursor-pointer"
               onClick={() => setShowCartContainer(!showCartContainer)}
             />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 mt-16 px-4">
-        {/* Welcome Section */}
-        <div className="mt-4">
-          <h1 className="text-lg md:text-xl font-bold text-gray-800">Hallo, User!</h1>
-          <p className="text-sm text-gray-600">Selamat Datang di KIOS MINI</p>
-        </div>
-
-        {/* Featured Banner */}
-        <div className="mt-6 bg-[#95553031] rounded-lg p-4 flex flex-col md:flex-row items-center justify-between">
-          <div>
-            <h2 className="text-lg font-bold text-gray-800">New Collection</h2>
-            <p className="text-sm font-medium text-gray-700">
-              Recommendations, <br /> from our shop!
-            </p>
-            <button className="mt-4 px-4 py-2 bg-[#955530] text-white rounded-lg text-sm">
-              Shop Now
-            </button>
-          </div>
-          <img
-            src="/api/placeholder/128/128"
-            alt="New Collection"
-            className="w-24 h-24 object-contain mt-4 md:mt -0"
-          />
-        </div>
-
-        {/* Categories */}
-        <div className="mt-8">
-          <h2 className="text-lg font-bold text-gray-800 mb-4">Categories</h2>
-          <div className="flex space-x-3 overflow-x-auto scrollbar-hide">
-            {["Tools", "Paint", "Hardware", "Storage"].map((name, index) => (
-              <div
-                key={index}
-                className="bg-[#955530ae] text-white text-sm font-medium rounded-full p-3 flex items-center justify-center w-20 h-20"
-              >
-                {name}
-              </div>
-            ))}
+            <FontAwesomeIcon icon={faInfoCircle} className="text-black text-base" />
           </div>
         </div>
 
-        {/* Products */}
-        <div className="mt-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Products</h2>
-            <select className="text-sm border rounded px-2 py-1">
-              <option>All</option>
-              <option>Newest</option>
-              <option>Popular</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            {productNames.map((name, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg p-3 shadow-sm relative"
-              >
-                <div className="flex justify-between mb-2">
-                  <ShoppingCart
-                    className="w-5 h-5 text-gray-600 cursor-pointer"
-                    onClick={() => handleAddToCart(index)}
+        {/* Cart Section */}
+        {showCartContainer && (
+          <div className="absolute top-16 right-0 left-0 bg-gray-100 shadow-md rounded-lg p-2 z-50">
+            <h2 className="text-center font-bold text-sm mb-2">PEMESANAN</h2>
+            {cartItems.length > 0 ? (
+              cartItems.map((item, index) => (
+                <div key={index} className="flex items-center mb-2">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-10 h-10 rounded mr-2"
                   />
-                  <Heart
-                    className={`w-5 h-5 cursor-pointer ${
-                      liked[index] ? "text-red-500" : "text-gray-400"
-                    }`}
-                    onClick={() => handleLikeClick(index)}
-                  />
+                  <div className="flex flex-col flex-grow">
+                    <span className="text-xs font-bold">{item.name}</span>
+                    <span className="text-xs text-gray-500">Rp. {item.price}</span>
+                  </div>
                 </div>
-                <img
-                  src="/api/placeholder/128/128"
-                  alt={name}
-                  className="w-full h-24 object-contain mb-2"
-                />
-                <h3 className="text-sm font-medium text-gray-800">{name}</h3>
-                <p className="text-sm font-bold text-red-500">
-                  Rp. {productPrices[index]}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {/* Cart Modal */}
-      {showCartContainer && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-end">
-          <div className="bg-white rounded-t-lg p-4 w-full max-w-md mx-4 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-lg font-bold text-center mb-4">Pemesanan</h2>
-            {cartItems.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center border-b pb-4 mb-4"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 object-contain bg-gray-100 rounded-lg"
-                />
-                <div className="ml-3 flex-1">
-                  <h3 className="text-sm font-bold">{item.name}</h3>
-                  <p className="text-sm font-medium text-red-500">
-                    Rp. {item.price}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-xs">Tidak ada produk dalam keranjang.</p>
+            )}
             <button
-              className="w-full bg-[#955530] text-white py-2 rounded-lg"
+              className="w-full bg-orange-500 text-white py-1 rounded mt-2 text-xs"
               onClick={handleCheckout}
             >
               Checkout
-            </button>
+ </button>
           </div>
+        )}
+
+        {/* Banner Section */}
+        <div className="bg-gray-200 rounded-lg p-2 mb-4">
+          <img
+            src={kapakImage}
+            alt="New Collection"
+            className="w-full h-20 object-cover rounded-md mb-2"
+          />
+          <h2 className="text-xs font-bold text-center leading-tight">New Collection</h2>
+          <p className="text-xs text-center leading-tight">Recommendations, from our shop!</p>
         </div>
-      )}
+
+        {/* Products Section */}
+        <div className="grid grid-cols-2 gap-2">
+          {productImages.map((image, index) => (
+            <div
+              key={index}
+              className="bg-gray-200 rounded-lg p-1 flex flex-col items-center relative"
+            >
+              <FontAwesomeIcon
+                icon={faHeart}
+                className={`absolute top-1 right-1 text-sm cursor-pointer ${
+                  liked[index] ? "text-red-500" : "text-gray-400"
+                }`}
+                onClick={() => handleLikeClick(index)}
+              />
+              <img src={image} alt={productNames[index]} className="w-16 h-16 mb-1" />
+              <span className="text-xs font-bold text-center">
+                {productNames[index]}
+              </span>
+              <span className="text-xs text-orange-500 font-bold">
+                Rp. {productPrices[index]}
+              </span>
+              <button
+                className="mt-1 text-xs bg-orange-500 text-white py-1 px-1 rounded"
+                onClick={() => handleAddToCart(index)}
+              >
+                Tambah ke Keranjang
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 };

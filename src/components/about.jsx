@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./Navbar"; // Pastikan path ini sesuai dengan lokasi Navbar
-import Footer from "./footer"; // Pastikan path ini sesuai dengan lokasi Footer
+import Navbar from "./Navbar"; 
+import Footer from "./footer"; 
 
 const About = () => {
   return (

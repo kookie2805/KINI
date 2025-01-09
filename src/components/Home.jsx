@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -25,7 +25,7 @@ const HomePage = () => {
   const [liked, setLiked] = useState([false, false, false, false, false]);
   const [showCartContainer, setShowCartContainer] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
+  const navigate = useNavigate(); 
 
   const handleLikeClick = (index) => {
     const updatedLikes = [...liked];
@@ -71,7 +71,6 @@ const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-1 p-4">
-        {/* Konten utama */}
         <div className="flex flex-col text-lg text-gray-800 ml-15 mt-[50px]">
           <div className="flex items-center mt-[16px] pt-8">
             <FontAwesomeIcon icon={faMapMarkerAlt} className="text-black text-2xl ml-7 mr-3" />
@@ -89,7 +88,6 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Cart container */}
         {showCartContainer && (
           <div className="absolute top-30 right-0 bg-[#933804ed] left-25 w-[499px] h-[603px] p-4 shadow-md z-50 rounded-[19px] flex flex-col">
             <div className="flex items-start justify-center mb-4">
@@ -152,7 +150,7 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Kategori dan produk */}
+        {/* Kategori - produk */}
         <div className="flex flex-col md:flex-row md:space-x-4 box-container-wrapper ml-[-125px]">
           <div className="w-[610px] h-[280px] bg-[#95553031] rounded-lg mx-auto my-5 p-4 shadow-md flex flex-row-reverse items-start relative">
             <img
@@ -218,7 +216,7 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Product and footer */}
+        {/* Product - footer */}
         <div className="w-1/3 h-[2px] bg-black mx-auto mb-2 mt-[25px]"></div>
         <div className="w-1/4 h-[2px] bg-black mx-auto mb-5 mt-[25px]"></div>
 
