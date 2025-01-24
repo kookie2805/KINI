@@ -90,37 +90,50 @@ const CategoryPage = ({ cartItems, handleAddToCart }) => {
         ></div>
       )}
 
-      {/* Sidebar (Hidden on Mobile, Visible on Desktop) */}
-      <div
-  className={`fixed top-0 left-0 w-full md:w-[317px] h-auto bg-[#c6bbb6] rounded-lg shadow-md p-4 mb-4 md:mb-9 md:mt-[-50px] transform transition-transform duration-300 z-50 md:block ${
-    isMenuOpen ? "translate-x-0" : "translate-x-full"
-  }`}
+      {/* Overlay hanya untuk mobile */}
+{isMenuOpen && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    onClick={() => setIsMenuOpen(false)} // Tutup menu saat overlay di-klik
+  ></div>
+)}
+
+{/* Sidebar (Mobile dan Desktop) */}
+<div
+  className={`md:w-[317px] md:h-[669px] bg-[#c6bbb6] rounded-lg shadow-md p-4 md:relative md:mt-[-50px] md:block ${
+    isMenuOpen ? "fixed top-0 left-0 w-[250px] h-full z-50 transform translate-x-0" : "hidden"
+  } md:translate-x-0`}
 >
-        <h1 className="text-black text-2xl font-bold mb-4 mt-10">Category</h1>
-        <div className="mt-8">
-          <div
-            className={`mb-3 cursor-pointer p-2 rounded-lg ${selectedProduct === null ? "bg-[#955530ae] text-white" : "text-black"}`}
-            onClick={() => {
-              setSelectedProduct(null);
-              setIsMenuOpen(false); // Tutup menu setelah memilih kategori
-            }}
-          >
-            <p className="text-lg font-medium ml-2">• All Product</p>
-          </div>
-          {Object.keys(products).map((category, index) => (
-            <div
-              key={index}
-              className={`mb-3 cursor-pointer p-2 rounded-lg ${selectedProduct?.category === category ? "bg-[#955530ae] text-white" : "text-black"}`}
-              onClick={() => {
-                setSelectedProduct({ category });
-                setIsMenuOpen(false); // Tutup menu setelah memilih kategori
-              }}
-            >
-              <p className="text-lg font-medium ml-2">• {category}</p>
-            </div>
-          ))}
-        </div>
+  <h1 className="text-black text-2xl font-bold mb-4 mt-10">Category</h1>
+  <div className="mt-8">
+    <div
+      className={`mb-3 cursor-pointer p-2 rounded-lg ${
+        selectedProduct === null ? "bg-[#955530ae] text-white" : "text-black"
+      }`}
+      onClick={() => {
+        setSelectedProduct(null);
+        setIsMenuOpen(false); // Tutup menu setelah memilih kategori
+      }}
+    >
+      <p className="text-lg font-medium ml-2">• All Product</p>
+    </div>
+    {Object.keys(products).map((category, index) => (
+      <div
+        key={index}
+        className={`mb-3 cursor-pointer p-2 rounded-lg ${
+          selectedProduct?.category === category ? "bg-[#955530ae] text-white" : "text-black"
+        }`}
+        onClick={() => {
+          setSelectedProduct({ category });
+          setIsMenuOpen(false); // Tutup menu setelah memilih kategori
+        }}
+      >
+        <p className="text-lg font-medium ml-2">• {category}</p>
       </div>
+    ))}
+  </div>
+</div>
+
 
       {/* Product List */}
       <div className="flex-1 p-5">
