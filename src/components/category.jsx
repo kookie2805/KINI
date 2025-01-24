@@ -92,12 +92,12 @@ const CategoryPage = ({ cartItems, handleAddToCart }) => {
 
       {/* Sidebar (Hidden on Mobile, Visible on Desktop) */}
       <div
-        className={`relative w-full md:w-[317px] h-auto md:h-[669px] bg-[#c6bbb6] rounded-lg shadow-md p-4 mb-4 md:mb-9 md:mt-0 transform transition-transform duration-300 z-50 ${
-          isMenuOpen ? "translate-x-0" : "hidden md:block"
-        }`}
-      >
-        <h1 className="text-black text-2xl font-bold mb-4 mt-5">Category</h1>
-        <div className="mt-4">
+  className={`fixed top-0 left-0 w-full md:w-[317px] h-auto bg-[#c6bbb6] rounded-lg shadow-md p-4 mb-4 md:mb-9 md:mt-[-50px] transform transition-transform duration-300 z-50 md:block ${
+    isMenuOpen ? "translate-x-0" : "translate-x-full"
+  }`}
+>
+        <h1 className="text-black text-2xl font-bold mb-4 mt-10">Category</h1>
+        <div className="mt-8">
           <div
             className={`mb-3 cursor-pointer p-2 rounded-lg ${selectedProduct === null ? "bg-[#955530ae] text-white" : "text-black"}`}
             onClick={() => {

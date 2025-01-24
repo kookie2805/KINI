@@ -265,15 +265,7 @@ const HomePage = () => {
           </div>
         )}
 
-<div>
-          {searchResults.length > 0 ? (
-            searchResults.map((result, index) => (
-              <div key={index}>{result}</div>
-            ))
-          ) : (
-            <div>Tidak ada hasil pencarian.</div>
-          )}
-        </div>
+
 
         {/* Kategori - produk */}
         <div className="flex flex-col md:flex-row md:space-x-4 box-container-wrapper ml-[-125px]">

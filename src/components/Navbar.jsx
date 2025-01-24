@@ -39,12 +39,7 @@ const Navbar = ({ onSearch }) => {
   }}
 />
 
-      <button 
-        onClick={handleSearch}
-        className="ml-2 bg-[#fff] text-[#955530] px-4 py-1 rounded-[20px ]"
-      >
-        Cari
-      </button>
+      
 
       <nav className="flex gap-6">
         <Link to="/" className="flex flex-col items-center">
