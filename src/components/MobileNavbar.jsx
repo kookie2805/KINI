@@ -7,7 +7,7 @@ import userImage from '../assets/user.png';
 
 const MobileNavbar = () => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#955530] h-[70px] flex items-center justify-around z-50">
+    <div className="fixed left-0 right-0 bg-[#111B33] h-[70px] flex items-center justify-around z-50 rounded-[50px] shadow-lg mb-4 mx-4 bottom-3">
       <Link to="/" className="flex flex-col items-center">
         <img src={homeImage} alt="Home" className="w-[30px] h-[30px] object-contain" />
         <span className="text-white text-xs">Home</span>
@@ -24,10 +24,10 @@ const MobileNavbar = () => {
         <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
         <span className="text-white text-xs">Login</span>
       </Link>
-      <Link to="/AddProduct" className="flex flex-col items-center">
+      {/* <Link to="/AddProduct" className="flex flex-col items-center">
         <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
         <span className="text-white text-xs">AddProduct</span>
-      </Link>
+      </Link> */}
     </div>
   );
 };

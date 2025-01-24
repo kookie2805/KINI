@@ -1,11 +1,10 @@
 import React from "react";
-import Navbar from "./Navbar"; 
 import Footer from "./footer"; 
 
 const About = () => {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <main className="about-content pt-32 pb-10 flex flex-col items-center relative">
         <img
           src="https://res.cloudinary.com/ddl4sxrb3/image/upload/v1735308689/Group_427320498_imd6v3.png"
@@ -57,6 +56,41 @@ const About = () => {
           ></path>
         </svg>
       </div>
+
+      <section className="bg-white relative p-20 flex flex-col items-center justify-center">
+  {/* Box Image 1 (Atas) */}
+  <div className="image-box mb-8">
+    <img
+      src="https://res.cloudinary.com/ddl4sxrb3/image/upload/v1735373341/IMG-20241213-WA0016_p0cddb.jpg"
+      alt="Deskripsi Gambar 1"
+      className="rounded-[25px]"
+      style={{ width: "400px", height: "auto" }}
+    />
+  </div>
+
+  {/* Box Image 2 dan 3 (Bawah) */}
+  <div className="flex gap-8">
+    {/* Box Image 2 */}
+    <div className="image-box">
+      <img
+        src="https://res.cloudinary.com/ddl4sxrb3/image/upload/v1735373341/IMG-20241213-WA0016_p0cddb.jpg"
+        alt="Deskripsi Gambar 2"
+        className="rounded-[25px]"
+        style={{ width: "400px", height: "auto" }}
+      />
+    </div>
+
+    {/* Box Image 3 */}
+    <div className="image-box">
+      <img
+        src="https://res.cloudinary.com/ddl4sxrb3/image/upload/v1735373341/IMG-20241213-WA0016_p0cddb.jpg"
+        alt="Deskripsi Gambar 3"
+        className="rounded-[25px]"
+        style={{ width: "400px", height: "auto" }}
+      />
+    </div>
+  </div>
+</section>
 
       <Footer />
     </div>

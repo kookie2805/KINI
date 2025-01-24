@@ -5,9 +5,12 @@ import Navbar from "./Navbar"; // Sesuaikan path file Navbar Anda
 const Checkout = () => {
   const location = useLocation();
   const cartItems = location.state?.cartItems || []; // Ambil data keranjang dari state
+  const quantities = location.state?.quantities || {}; // Ambil jumlah produk dari state
 
-  // Hitung total harga
-  const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
+  // Hitung total harga berdasarkan jumlah produk
+  const totalPrice = cartItems.reduce((total, item, index) => {
+    return total + item.price * (quantities[index] || 1); // Menggunakan quantities untuk total
+  }, 0);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -93,6 +96,12 @@ const Checkout = () => {
                   <span className="text-white font-medium">{item.name}</span>
                   <span className="text-white font-bold">
                     Rp {item.price.toLocaleString()}
+                  </span>
+                  <span className="text-white font-medium">
+                    x {quantities[index] || 1}
+                  </span>
+                  <span className="text-white font-bold">
+                    Rp {(item.price * (quantities[index] || 1)).toLocaleString()}
                   </span>
                 </div>
               ))}

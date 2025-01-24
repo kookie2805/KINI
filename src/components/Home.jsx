@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -20,12 +20,14 @@ import MeteranImage from "../assets/Meteran.png";
 import SekopImage from "../assets/Sekop.png";
 import settingImage from "../assets/setting.png";
 import Footer from "./footer";
+import Navbar from "./Navbar";
 
 const HomePage = () => {
   const [liked, setLiked] = useState([false, false, false, false, false]);
   const [showCartContainer, setShowCartContainer] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const navigate = useNavigate(); 
+  const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
 
   const handleLikeClick = (index) => {
     const updatedLikes = [...liked];
@@ -33,20 +35,9 @@ const HomePage = () => {
     setLiked(updatedLikes);
   };
 
-  const handleAddToCart = (index) => {
-    const newItem = {
-      name: productNames[index],
-      image: productImages[index],
-      price: productPrices[index],
-    };
-    setCartItems((prevItems) => [...prevItems, newItem]);
-    setShowCartContainer(true);
-  };
-
   const handleCheckout = () => {
     navigate("/checkout", { state: { cartItems } }); // Kirim data keranjang
   };
-  
 
   const productImages = [
     pompaImage,
@@ -55,6 +46,27 @@ const HomePage = () => {
     MeteranImage,
     SekopImage,
   ];
+
+  const [selectAll, setSelectAll] = useState(false);
+
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelectAll = () => {
+    if (!selectAll) {
+      setSelectedItems(cartItems.map((item, index) => index));
+    } else {
+      setSelectedItems([]);
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleItemSelect = (index) => {
+    if (selectedItems.includes(index)) {
+      setSelectedItems(selectedItems.filter((item) => item !== index));
+    } else {
+      setSelectedItems([...selectedItems, index]);
+    }
+  };
 
   const productNames = ["Pompa Air", "Linggis", "Kuas Cat", "Meteran", "Sekop"];
 
@@ -68,23 +80,78 @@ const HomePage = () => {
     { width: "w-[140px]", height: "h-[140px]" },
   ];
 
+  const handleProductClick = (index) => {
+    const product = {
+      name: productNames[index],
+      image: productImages[index],
+      price: productPrices[index],
+      description: "Deskripsi produk ini akan ditampilkan di sini.", // Tambahkan deskripsi produk
+    };
+    navigate("/product-detail", { state: { product } });
+  };
+
+  // Tambahkan state untuk menyimpan jumlah produk
+  const [quantities, setQuantities] = useState({});
+
+  // Perbarui fungsi handleAddToCart untuk menyimpan jumlah produk
+  const handleAddToCart = (index) => {
+    const newItem = {
+      name: productNames[index],
+      image: productImages[index],
+      price: productPrices[index],
+    };
+    const existingItem = cartItems.find((item) => item.name === newItem.name);
+    if (existingItem) {
+      const updatedQuantities = { ...quantities };
+      updatedQuantities[index] = (updatedQuantities[index] || 1) + 1;
+      setQuantities(updatedQuantities);
+    } else {
+      setCartItems((prevItems) => [...prevItems, newItem]);
+      setQuantities((prevQuantities) => ({ ...prevQuantities, [index]: 1 }));
+    }
+    setShowCartContainer(true);
+  };
+
+  const handleSearch = (query) => {
+    console.log("Searching for:", query); // Debugging
+    const results = productNames.filter((name) => 
+      name.toLowerCase().includes(query.toLowerCase())
+    );
+    console.log("Results found:", results); // Debugging
+    setSearchResults(results);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-1 p-4">
-        <div className="flex flex-col text-lg text-gray-800 ml-15 mt-[50px]">
-          <div className="flex items-center mt-[16px] pt-8">
-            <FontAwesomeIcon icon={faMapMarkerAlt} className="text-black text-2xl ml-7 mr-3" />
-            <span className="ml-4 ">Jalan. Peterongan Tengah Raya</span>
+        <div className="flex flex-col text-lg text-gray-800 mt-6">
+          <div className="flex items-center mt-4 pt-2">
+            <FontAwesomeIcon
+              icon={faMapMarkerAlt}
+              className="text-black text-2xl ml-7 mr-3"
+            />
+            <a
+              href="https://maps.app.goo.gl/mkmc7nMVmBr3GraT6"
+              className="ml-4"
+            >
+              Jalan. Peterongan Tengah Raya
+            </a>
           </div>
-          
           <div className="flex items-center ml-auto">
             <FontAwesomeIcon
               icon={faShoppingCart}
               className="text-black text-2xl mx-2 cursor-pointer"
               onClick={() => setShowCartContainer(!showCartContainer)}
             />
-            <img src={settingImage} alt="Settings" className="w-[24px] h-[24px] mx-2" />
-            <FontAwesomeIcon icon={faInfoCircle} className="text-black text-2xl" />
+            <img
+              src={settingImage}
+              alt="Settings"
+              className="w-[24px] h-[24px] mx-2"
+            />
+            <FontAwesomeIcon
+              icon={faInfoCircle}
+              className="text-black text-2xl"
+            />
           </div>
         </div>
 
@@ -100,8 +167,10 @@ const HomePage = () => {
                     <input
                       type="checkbox"
                       className="mr-2"
+                      checked={selectedItems.includes(index)}
+                      onChange={() => handleItemSelect(index)}
                     />
-                    <div className="bg-white rounded-[15px p-3 flex items-center">
+                    <div className="bg-white rounded-[15px] p-3 flex items-center">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -109,36 +178,82 @@ const HomePage = () => {
                       />
                     </div>
                     <div className="ml-3 flex flex-col justify-center">
-                      <span className="text-white text-xl font-bold">{item.name}</span>
+                      <span className="text-white text-xl font-bold">
+                        {item.name}
+                      </span>
                       <div className="flex items-center mt-1">
-                        <FontAwesomeIcon icon={faStar} className="text-gray-400 mr-1" />
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          className="text-gray-400 mr-1"
+                        />
                         <span className="text-white">4.5</span>
                       </div>
-                      <span className="text-red-500 text-lg font-bold mt-1">Rp. {item.price}</span>
+                      <span className="text-red-500 text-lg font-bold mt-1">
+                        Rp. {item.price}
+                      </span>
                     </div>
                     <div className="ml-4 flex items-center">
-                      <button className="bg-gray-300 text-black px-2 py-1 rounded-l hover:bg-gray-400 transition duration-200">-</button>
+                      <button
+                        className="bg-gray-300 text-black px-2 py-1 rounded-l hover:bg-gray-400 transition duration-200"
+                        onClick={() => {
+                          const newQuantities = { ...quantities };
+                          if (newQuantities[index] > 1) {
+                            newQuantities[index]--;
+                          } else {
+                            newQuantities[index] = 1;
+                          }
+                          setQuantities(newQuantities);
+                        }}
+                      >
+                        -
+                      </button>
                       <input
                         type="number"
                         min="1"
-                        value="1"
+                        value={quantities[index] || 0}
                         className="w-[50px] text-center border border-gray-300 rounded mx-1"
+                        onChange={(e) => {
+                          const newQuantities = { ...quantities };
+                          newQuantities[index] = parseInt(e.target.value);
+                          setQuantities(newQuantities);
+                        }}
                       />
-                      <button className="bg-gray-300 text-black px-2 py-1 rounded-r hover:bg-gray-400 transition duration-200">+</button>
+                      <button
+                        className="bg-gray-300 text-black px-2 py-1 rounded-r hover:bg-gray-400 transition duration-200"
+                        onClick={() => {
+                          const newQuantities = { ...quantities };
+                          newQuantities[index]++;
+                          setQuantities(newQuantities);
+                        }}
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                 ))
               ) : (
-                <span className="text-white">Tidak ada produk dalam pemesanan.</span>
+                <span className="text-white">
+                  Tidak ada produk dalam pemesanan.
+                </span>
               )}
             </div>
             <div className="flex items-center justify-between mt-4 bg-white rounded-[15px] p-3">
               <div className="flex items-center">
-                <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectAll}
+                  onChange={handleSelectAll}
+                />
                 <span className="text-gray-800 font-bold">Semua</span>
               </div>
               <span className="text-red-500 font-bold">
-                Total: Rp. {cartItems.reduce((total, item) => total + item.price, 0)}
+                Total: Rp.{" "}
+                {cartItems.reduce(
+                  (total, item, index) =>
+                    total + item.price * (quantities[index] || 1),
+                  0
+                )}
               </span>
               <button
                 className="bg-[#955530] text-white px-4 py-2 rounded-[15px] mt-4 hover:bg-[#7a4722] transition duration-300"
@@ -149,6 +264,16 @@ const HomePage = () => {
             </div>
           </div>
         )}
+
+<div>
+          {searchResults.length > 0 ? (
+            searchResults.map((result, index) => (
+              <div key={index}>{result}</div>
+            ))
+          ) : (
+            <div>Tidak ada hasil pencarian.</div>
+          )}
+        </div>
 
         {/* Kategori - produk */}
         <div className="flex flex-col md:flex-row md:space-x-4 box-container-wrapper ml-[-125px]">
@@ -225,7 +350,7 @@ const HomePage = () => {
             Product Kini
           </div>
           <div className="flex gap-5">
-            <div className="cursor-pointer text-lg font-bold py-2 px-4 rounded-full hover:bg-[#955530ae] hover:text-white transition duration-300 mt-2">
+            <div className="cursor-pointer text-lg font-bold py-2 px-4 rounded-full hover:bg-[#955530ae] hover:text-white transition duration-300">
               All
             </div>
             <div className="cursor-pointer text-lg font-bold py-2 px-4 rounded-full hover:bg-[#955530ae] hover:text-white transition duration-300">
@@ -242,11 +367,15 @@ const HomePage = () => {
             <div
               key={index}
               className="box-container-like relative bg-[#955530ae] rounded-lg p-1 shadow-md w-1/6"
+              onClick={() => handleProductClick(index)}
             >
               <FontAwesomeIcon
                 icon={faShoppingCart}
                 className="absolute top-2 left-2 text-lg text-white cursor-pointer"
-                onClick={() => handleAddToCart(index)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Mencegah event click pada produk
+                  handleAddToCart(index);
+                }}
               />
               <FontAwesomeIcon
                 icon={faHeart}
