@@ -38,6 +38,9 @@ const FooterDesktop = () => {
       <p className="absolute top-20 ml-40 text-xl text-left text-gray-400">
         Get Exclusive digital marketing update<br />straight to your inbox
       </p>
+
+      <hr className="absolute w-full border-white border-t-2 mt-48" />
+      
     </div>
   );
 };

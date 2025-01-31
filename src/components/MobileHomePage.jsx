@@ -185,7 +185,7 @@ const MobileHomePage = () => {
 
       {/* Flash Sale Section */}
       <div className="flex justify-between items-center mt-6 mb-4">
-      <h2 className="text-left text-lg font-bold text-gray-800 mt-3">Flash Sale</h2>
+      <h2 className="text-left text-lg font-bold text-gray-800 mt-3 ">Flash Sale</h2>
           <div className="text-sm font-bold text-red-500">{formatTime(timeLeft)}</div>
       </div>
 
@@ -205,7 +205,7 @@ const MobileHomePage = () => {
 
           <div className="boxes-wrapper flex flex-col justify-center gap-5 mt-5"> {/* Jarak vertikal antara baris */}
   {Array(Math.ceil(productImages.length / 2)).fill().map((_, rowIndex) => (
-    <div key={rowIndex} className="flex flex-row justify-between gap-5 mt-6"> {/* Jarak horizontal antara product */}
+    <div key={rowIndex} className="flex flex-row justify-between gap-2 mt-6"> {/* Jarak horizontal antara product */}
       {productImages.slice(rowIndex * 2, (rowIndex + 1) * 2).map((image, index) => (
         <div
           key={index}

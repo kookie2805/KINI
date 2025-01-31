@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import homeImage from '../assets/Home.png';
+import homeImage from '../assets/ihome.png';
 import tasImage from '../assets/Tas.png';
 import contactImage from '../assets/Contact.png';
 import userImage from '../assets/user.png';
@@ -43,22 +43,24 @@ const Navbar = ({ onSearch }) => {
 
       <nav className="flex gap-6">
         <Link to="/" className="flex flex-col items-center">
-          <img src={homeImage} alt="Home" className="w-[33px] h-[33px] object-contain" />
+          <img src={homeImage} alt="Home" className="w-[30px] h-[30px] object-contain" />
           <span className="text-[14px] text-white mt-2">Home</span>
         </Link>
         <Link to="/category" className="flex flex-col items-center">
           <img src={tasImage} alt="Keranjang" className="w-[30px] h-[30px] object-contain" />
-          <span className="text-[14px] text-white mt-3">Keranjang</span>
+          <span className="text-[14px] text-white mt-3">Category</span>
         </Link>
         <Link to="/about" className="flex flex-col items-center">
           <img src={contactImage} alt="Contact" className="w-[34px] h-[34px] object-contain" />
-          <span className="text-[14px] text-white mt-2">Contact</span>
+          <span className="text-[14px] text-white mt-2">About</span>
         </Link>
         <Link to="#login" className="flex flex-col items-center">
           <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
           <span className="text-[14px] text-white mt-3">Login</span>
         </Link>
+
       </nav>
+      
     </div>
   );
 };

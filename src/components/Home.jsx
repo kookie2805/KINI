@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react"; // Tambahkan useEffect
+import { useNavigate, useLocation } from "react-router-dom"; // Tambahkan useLocation
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -28,6 +28,7 @@ const HomePage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLikeClick = (index) => {
     const updatedLikes = [...liked];
@@ -48,30 +49,9 @@ const HomePage = () => {
   ];
 
   const [selectAll, setSelectAll] = useState(false);
-
   const [selectedItems, setSelectedItems] = useState([]);
-
-  const handleSelectAll = () => {
-    if (!selectAll) {
-      setSelectedItems(cartItems.map((item, index) => index));
-    } else {
-      setSelectedItems([]);
-    }
-    setSelectAll(!selectAll);
-  };
-
-  const handleItemSelect = (index) => {
-    if (selectedItems.includes(index)) {
-      setSelectedItems(selectedItems.filter((item) => item !== index));
-    } else {
-      setSelectedItems([...selectedItems, index]);
-    }
-  };
-
   const productNames = ["Pompa Air", "Linggis", "Kuas Cat", "Meteran", "Sekop"];
-
   const productPrices = [15000, 20000, 10000, 25000, 30000];
-
   const imageSizes = [
     { width: "w-[120px]", height: "h-[120px]" },
     { width: "w-[130px]", height: "h-[130px]" },
@@ -85,15 +65,22 @@ const HomePage = () => {
       name: productNames[index],
       image: productImages[index],
       price: productPrices[index],
-      description: "Deskripsi produk ini akan ditampilkan di sini.", // Tambahkan deskripsi produk
+      description: "Deskripsi produk ini akan ditampilkan di sini.",
     };
-    navigate("/product-detail", { state: { product } });
+
+    const similarProducts = productImages
+      .map((image, i) => ({
+        name: productNames[i],
+        image: image,
+        price: productPrices[i],
+      }))
+      .filter((_, i) => i !== index); 
+
+    navigate("/product-detail", { state: { product, similarProducts } });
   };
 
-  // Tambahkan state untuk menyimpan jumlah produk
   const [quantities, setQuantities] = useState({});
 
-  // Perbarui fungsi handleAddToCart untuk menyimpan jumlah produk
   const handleAddToCart = (index) => {
     const newItem = {
       name: productNames[index],
@@ -113,13 +100,43 @@ const HomePage = () => {
   };
 
   const handleSearch = (query) => {
-    console.log("Searching for:", query); // Debugging
-    const results = productNames.filter((name) => 
+    console.log("Searching for:", query); 
+    const results = productNames.filter((name) =>
       name.toLowerCase().includes(query.toLowerCase())
     );
-    console.log("Results found:", results); // Debugging
+    console.log("Results found:", results); 
     setSearchResults(results);
   };
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselImages = [kapakImage, MeteranImage, SekopImage]; // Gunakan 3 gambar berbeda
+
+  useEffect(() => {
+    if (location.state?.addToCart) {
+      const productToAdd = location.state.addToCart;
+      const existingItemIndex = cartItems.findIndex(
+        (item) => item.name === productToAdd.name
+      );
+
+      if (existingItemIndex !== -1) {
+        const newQuantities = { ...quantities };
+        newQuantities[existingItemIndex] = (newQuantities[existingItemIndex] || 1) + 1;
+        setQuantities(newQuantities);
+      } else {
+        setCartItems((prevItems) => {
+          const newItems = [...prevItems, productToAdd];
+          setQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [prevItems.length]: 1,
+          }));
+          return newItems;
+        });
+      }
+
+      setShowCartContainer(true);
+      navigate(".", { state: {}, replace: true });
+    }
+  }, [location.state]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -208,7 +225,7 @@ const HomePage = () => {
                         -
                       </button>
                       <input
-                        type="number"
+ type="number"
                         min="1"
                         value={quantities[index] || 0}
                         className="w-[50px] text-center border border-gray-300 rounded mx-1"
@@ -265,21 +282,47 @@ const HomePage = () => {
           </div>
         )}
 
-
-
         {/* Kategori - produk */}
         <div className="flex flex-col md:flex-row md:space-x-4 box-container-wrapper ml-[-125px]">
           <div className="w-[610px] h-[280px] bg-[#95553031] rounded-lg mx-auto my-5 p-4 shadow-md flex flex-row-reverse items-start relative">
-            <img
-              src={kapakImage}
-              alt="New Collection"
-              className="w-[275px] h-auto rounded-lg ml-4"
-            />
+            {/* Carousel Container */}
+            <div className="w-[275px] h-[180px] ml-4 relative overflow-hidden rounded-lg">
+              <div
+                className="flex transition-transform duration-300 ease-in-out h-full"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {carouselImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`Slide ${index + 1}`}
+                    className="min-w-full h-full object-cover"
+                  />
+                ))}
+              </div>
+
+              {/* Dot Indicators */}
+              <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                {carouselImages.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      currentSlide === index
+                        ? "bg-white scale-125"
+                        : "bg-gray-400 hover:bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Bagian teks tetap sama */}
             <div className="flex flex-col justify-start items-start w-full mr-4 mb-12">
               <h2 className="font-bold text-lg text-gray-800">
                 New Collection
               </h2>
-              <p className=" font-bold text-xl text-gray-800">
+              <p className="font-bold text-xl text-gray-800">
                 Recommendations, <br /> from our shop!
               </p>
             </div>

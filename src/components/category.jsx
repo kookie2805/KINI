@@ -59,8 +59,24 @@ const CategoryPage = ({ cartItems, handleAddToCart }) => {
   ];
 
   const handleProductClick = (product) => {
-    navigate("/product-detail", { state: { product } });
+    const cleanPrice = parseInt(product.price.replace(/[Rp. ]/g, ""), 10); // Hapus 'Rp.', spasi, dan titik, lalu ubah ke angka
+  
+    const similarProducts = allProducts.filter(
+      (p) => p.name !== product.name && p.category === product.category
+    );
+  
+    navigate("/product-detail", {
+      state: {
+        product: { ...product, price: cleanPrice }, // Oper harga yang sudah diubah ke angka
+        similarProducts: similarProducts.map((p) => ({
+          ...p,
+          price: parseInt(p.price.replace(/[Rp. ]/g, ""), 10),
+        })), // Bersihkan harga untuk produk serupa juga
+      },
+    });
   };
+  
+
 
   const handleLikeClick = (productName) => {
     setLiked((prevLiked) => ({
@@ -197,7 +213,7 @@ const CategoryPage = ({ cartItems, handleAddToCart }) => {
                     }}
                   />
                 </div>
-                <div className="absolute top-2 left-2 z-10">
+                {/* <div className="absolute top-2 left-2 z-10">
                   <FontAwesomeIcon
                     icon={faShoppingCart}
                     className="text-lg cursor-pointer text-gray-400 hover:text-white"
@@ -206,7 +222,7 @@ const CategoryPage = ({ cartItems, handleAddToCart }) => {
                       handleAddToCart(product);
                     }}
                   />
-                </div>
+                </div> */}
 
                 <div className="box-container-like bg-[#955530ae] rounded-lg p-4 shadow-md">
                   <img
