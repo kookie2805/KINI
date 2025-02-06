@@ -13,8 +13,9 @@ import CategoryPage from './components/category';
 import About from './components/About';
 import CheckoutPage from './components/checkout';
 import AddProduct from './components/addproduct';
-
 import ProductDetail from './components/productdetail';
+import Wishlist from './components/wishlist'; 
+import Notification from './components/notification';// Import Wishlist
 
 // Komponen ResponsiveNavbar
 const ResponsiveNavbar = () => {
@@ -31,6 +32,8 @@ const Layout = ({ children }) => {
 const App = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
+  
+
   return (
     <Router>
       {/* Navbar responsif */}
@@ -43,11 +46,16 @@ const App = () => {
           <Route path="/" element={isMobile ? <MobileHomePage /> : <HomePage />} />
 
           {/* Rute untuk halaman lainnya */}
-          <Route path="/category" element={<CategoryPage />} />
+          <Route path="/category" element={<CategoryPage />} />         
           <Route path="/about" element={<About />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/AddProduct" element={<AddProduct />} />
           <Route path="/product-detail" element={<ProductDetail />} />
+          
+          {/* Route untuk halaman Wishlist */}
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/notification" element={<Notification />} />
+
         </Routes>
       </Layout>
     </Router>

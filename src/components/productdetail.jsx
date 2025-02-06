@@ -21,6 +21,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
+    // Navigasi ke Home dengan state berisi produk
     navigate("/", {
       state: { 
         addToCart: {

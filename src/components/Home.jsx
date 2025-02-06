@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"; // Tambahkan useEffect
-import { useNavigate, useLocation } from "react-router-dom"; // Tambahkan useLocation
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -7,7 +7,9 @@ import {
   faInfoCircle,
   faHeart,
   faStar,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
+
 import kapakImage from "../assets/Kapak.png";
 import kuasImage from "../assets/Kuas.png";
 import pakuImage from "../assets/Paku.png";
@@ -27,13 +29,17 @@ const HomePage = () => {
   const [showCartContainer, setShowCartContainer] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const handleLikeClick = (index) => {
+  const handleHeartClick = (index) => {
     const updatedLikes = [...liked];
-    updatedLikes[index] = !updatedLikes[index];
+    updatedLikes[index] = !updatedLikes[index]; // Toggle like state
     setLiked(updatedLikes);
+
+    if (updatedLikes[index]) {
+      navigate("/wishlist"); // Pindah ke halaman wishlist jika produk disukai
+    }
   };
 
   const handleCheckout = () => {
@@ -48,10 +54,34 @@ const HomePage = () => {
     SekopImage,
   ];
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselImages = [kapakImage, MeteranImage, SekopImage];
+
   const [selectAll, setSelectAll] = useState(false);
+
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelectAll = () => {
+    if (!selectAll) {
+      setSelectedItems(cartItems.map((item, index) => index));
+    } else {
+      setSelectedItems([]);
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleItemSelect = (index) => {
+    if (selectedItems.includes(index)) {
+      setSelectedItems(selectedItems.filter((item) => item !== index));
+    } else {
+      setSelectedItems([...selectedItems, index]);
+    }
+  };
+
   const productNames = ["Pompa Air", "Linggis", "Kuas Cat", "Meteran", "Sekop"];
+
   const productPrices = [15000, 20000, 10000, 25000, 30000];
+
   const imageSizes = [
     { width: "w-[120px]", height: "h-[120px]" },
     { width: "w-[130px]", height: "h-[130px]" },
@@ -65,22 +95,15 @@ const HomePage = () => {
       name: productNames[index],
       image: productImages[index],
       price: productPrices[index],
-      description: "Deskripsi produk ini akan ditampilkan di sini.",
+      description: "Deskripsi produk ini akan ditampilkan di sini.", // Tambahkan deskripsi produk
     };
-
-    const similarProducts = productImages
-      .map((image, i) => ({
-        name: productNames[i],
-        image: image,
-        price: productPrices[i],
-      }))
-      .filter((_, i) => i !== index); 
-
-    navigate("/product-detail", { state: { product, similarProducts } });
+    navigate("/product-detail", { state: { product } });
   };
 
+  // Tambahkan state untuk menyimpan jumlah produk
   const [quantities, setQuantities] = useState({});
 
+  // Perbarui fungsi handleAddToCart untuk menyimpan jumlah produk
   const handleAddToCart = (index) => {
     const newItem = {
       name: productNames[index],
@@ -100,43 +123,68 @@ const HomePage = () => {
   };
 
   const handleSearch = (query) => {
-    console.log("Searching for:", query); 
+    console.log("Searching for:", query); // Debugging
     const results = productNames.filter((name) =>
       name.toLowerCase().includes(query.toLowerCase())
     );
-    console.log("Results found:", results); 
+    console.log("Results found:", results); // Debugging
     setSearchResults(results);
   };
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const carouselImages = [kapakImage, MeteranImage, SekopImage]; // Gunakan 3 gambar berbeda
-
   useEffect(() => {
-    if (location.state?.addToCart) {
-      const productToAdd = location.state.addToCart;
-      const existingItemIndex = cartItems.findIndex(
-        (item) => item.name === productToAdd.name
-      );
-
-      if (existingItemIndex !== -1) {
-        const newQuantities = { ...quantities };
-        newQuantities[existingItemIndex] = (newQuantities[existingItemIndex] || 1) + 1;
-        setQuantities(newQuantities);
+    try {
+      const storedWishlist = localStorage.getItem("wishlist");
+      console.log("Stored wishlist:", storedWishlist); // Log untuk melihat data yang diambil
+      if (storedWishlist) {
+        const parsedWishlist = JSON.parse(storedWishlist);
+        console.log("Parsed wishlist:", parsedWishlist); // Log hasil parsing
+        if (Array.isArray(parsedWishlist)) {
+          setWishlist(parsedWishlist);
+        } else {
+          console.warn("Wishlist data tidak valid");
+          setWishlist([]); // Set wishlist kosong jika data tidak valid
+        }
       } else {
-        setCartItems((prevItems) => {
-          const newItems = [...prevItems, productToAdd];
-          setQuantities((prevQuantities) => ({
-            ...prevQuantities,
-            [prevItems.length]: 1,
-          }));
-          return newItems;
-        });
+        setWishlist([]); // Jika tidak ada data wishlist di localStorage, set wishlist kosong
+      }
+    } catch (error) {
+      console.error("Error saat mengambil data wishlist:", error);
+      setWishlist([]); // Jika terjadi error saat parsing, set wishlist kosong
+    }
+  }, []);
+
+  const handleLikeClick = (index) => {
+    const newLiked = [...liked];
+    newLiked[index] = !newLiked[index];
+    setLiked(newLiked);
+
+    // Create product object with all necessary details
+    const product = {
+      name: productNames[index],
+      image: productImages[index],
+      price: productPrices[index],
+      liked: newLiked[index],
+    };
+
+    // Update wishlist based on like state
+    setWishlist((prevWishlist) => {
+      let updatedWishlist;
+      if (newLiked[index]) {
+        // Add to wishlist if not already present
+        const exists = prevWishlist.some((item) => item.name === product.name);
+        updatedWishlist = exists ? prevWishlist : [...prevWishlist, product];
+      } else {
+        // Remove from wishlist
+        updatedWishlist = prevWishlist.filter(
+          (item) => item.name !== product.name
+        );
       }
 
-      setShowCartContainer(true);
-      navigate(".", { state: {}, replace: true });
-    }
-  }, [location.state]);
+      // Save to localStorage
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      return updatedWishlist;
+    });
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -155,20 +203,44 @@ const HomePage = () => {
             </a>
           </div>
           <div className="flex items-center ml-auto">
-            <FontAwesomeIcon
-              icon={faShoppingCart}
-              className="text-black text-2xl mx-2 cursor-pointer"
-              onClick={() => setShowCartContainer(!showCartContainer)}
-            />
-            <img
-              src={settingImage}
-              alt="Settings"
-              className="w-[24px] h-[24px] mx-2"
-            />
-            <FontAwesomeIcon
-              icon={faInfoCircle}
-              className="text-black text-2xl"
-            />
+            {/* Icon Cart */}
+            <div className="relative group p-2 ">
+            <div className="absolute inset-0 w-9 h-9 bg-[#933804bf] ml-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <FontAwesomeIcon
+                icon={faShoppingCart}
+                className="text-black text-2xl mx-2 cursor-pointer relative"
+                onClick={() => setShowCartContainer(!showCartContainer)}
+              />
+            </div>
+
+            {/* Icon Heart */}
+            <div className="relative group p-2">
+              <div className="absolute inset-0 w-9 h-9 bg-[#933804bf] ml-3 translate-y-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <svg
+                className="w-[32px] h-[32px] mx-2 text-red-500 relative"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                onClick={handleHeartClick} // Menambahkan event klik untuk navigasi
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                />
+              </svg>
+            </div>
+
+            {/* Icon Bell */}
+            <div className="relative group p-2">
+              <div className="absolute inset-0 w-9 h-9 bg-[#933804bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-x-2"></div>
+
+              <FontAwesomeIcon
+                icon={faBell}
+                className="text-black text-2xl mx-2 relative cursor-pointer"
+                onClick={() => navigate("/notification")} // Menambahkan onClick untuk navigasi
+              />
+            </div>
           </div>
         </div>
 
@@ -225,7 +297,7 @@ const HomePage = () => {
                         -
                       </button>
                       <input
- type="number"
+                        type="number"
                         min="1"
                         value={quantities[index] || 0}
                         className="w-[50px] text-center border border-gray-300 rounded mx-1"
@@ -402,7 +474,7 @@ const HomePage = () => {
             <div
               key={index}
               className="box-container-like relative bg-[#955530ae] rounded-lg p-1 shadow-md w-1/6"
-              onClick={() => handleProductClick(index)}
+              onClick={() => handleProductClick(index)} // Event untuk klik pada produk
             >
               <FontAwesomeIcon
                 icon={faShoppingCart}
@@ -417,7 +489,10 @@ const HomePage = () => {
                 className={`absolute top-1 right-1 text-lg cursor-pointer ${
                   liked[index] ? "text-red-500" : "text-gray-400"
                 } like-button`}
-                onClick={() => handleLikeClick(index)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Mencegah event click pada produk agar hanya like yang diproses
+                  handleLikeClick(index);
+                }}
               />
               <div className="flex justify-center items-center h-full">
                 <img

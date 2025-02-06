@@ -44,7 +44,7 @@ const Navbar = ({ onSearch }) => {
       <nav className="flex gap-6">
         <Link to="/" className="flex flex-col items-center">
           <img src={homeImage} alt="Home" className="w-[30px] h-[30px] object-contain" />
-          <span className="text-[14px] text-white mt-2">Home</span>
+          <span className="text-[14px] text-white mt-3">Home</span>
         </Link>
         <Link to="/category" className="flex flex-col items-center">
           <img src={tasImage} alt="Keranjang" className="w-[30px] h-[30px] object-contain" />
