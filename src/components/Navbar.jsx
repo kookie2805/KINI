@@ -54,7 +54,7 @@ const Navbar = ({ onSearch }) => {
           <img src={contactImage} alt="Contact" className="w-[34px] h-[34px] object-contain" />
           <span className="text-[14px] text-white mt-2">About</span>
         </Link>
-        <Link to="#login" className="flex flex-col items-center">
+        <Link to="/profileuser" className="flex flex-col items-center">
           <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
           <span className="text-[14px] text-white mt-3">Login</span>
         </Link>
