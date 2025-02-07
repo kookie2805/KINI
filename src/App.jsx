@@ -17,6 +17,7 @@ import ProductDetail from './components/productdetail';
 import Wishlist from './components/wishlist'; 
 import Notification from './components/notification';// Import Wishlist
 import Profile from './components/profileuser';
+import Lapormasalah from './components/laporkanmasalah';
 
 // Komponen ResponsiveNavbar
 const ResponsiveNavbar = () => {
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="/AddProduct" element={<AddProduct />} />
           <Route path="/product-detail" element={<ProductDetail />} />
           <Route path="/profileuser" element={<Profile />} />
+          <Route path="/laporkanmasalah" element={<Lapormasalah />} />
           
           {/* Route untuk halaman Wishlist */}
           <Route path="/wishlist" element={<Wishlist />} />

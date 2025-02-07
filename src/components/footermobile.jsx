@@ -5,7 +5,7 @@ import { faPhone, faEnvelope, faMapMarkerAlt } from '@fortawesome/free-solid-svg
 const FooterDesktop = () => {
   return (
     <div className="bg-[#955530] text-white text-center py-6 min-h-[280px] mt-24 rounded-t-[70px] relative">
-      <h2 className="absolute top-4 left-40 text-4xl font-bold mt-7">Be Future-Ready</h2>
+      <h2 className="absolute top-4 left-40 text-4xl font-bold mt-7">Kios Mini</h2>
       
       <div className="absolute mt-5 left-[calc(45%+50px)] text-left"> {/* About Section */}
         <h3 className="text-xl font-bold">About</h3>
