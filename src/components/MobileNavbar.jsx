@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import homeImage from '../assets/ihome.png';
-import tasImage from '../assets/Tas.png';
-import contactImage from '../assets/Contact.png';
+import tasImage from '../assets/tas.png';
+import contactImage from '../assets/contact.png';
 import userImage from '../assets/user.png';
 
 const MobileNavbar = () => {
@@ -20,7 +20,7 @@ const MobileNavbar = () => {
         <img src={contactImage} alt="Contact" className="w-[30px] h-[30px] object-contain" />
         <span className="text-white text-xs">About</span>
       </Link>
-      <Link to="#login" className="flex flex-col items-center">
+      <Link to="/profileuser" className="flex flex-col items-center">
         <img src={userImage} alt="Login" className="w-[30px] h-[30px] object-contain" />
         <span className="text-white text-xs">Login</span>
       </Link>

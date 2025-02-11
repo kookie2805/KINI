@@ -10,8 +10,8 @@ import MobileNavbar from './components/MobileNavbar';
 import HomePage from './components/Home';
 import MobileHomePage from './components/MobileHomePage'; // Halaman khusus mobile
 import CategoryPage from './components/category';
-import About from './components/About';
-import CheckoutPage from './components/checkout';
+import About from './components/about';
+import CheckoutPage from './components/Checkout';
 import AddProduct from './components/addproduct';
 import ProductDetail from './components/productdetail';
 import Wishlist from './components/wishlist'; 

@@ -5,11 +5,11 @@ import { faHeart, faShoppingCart, faBars, faTimes, faBell } from "@fortawesome/f
 
 // Gambar produk
 import sekopImage from "../assets/Sekop.png";
-import cangkulImage from "../assets/Cangkul.png";
+import cangkulImage from "../assets/cangkul.png";
 import linggisImage from "../assets/Linggis.png";
-import hammerImage from "../assets/Hammer.png";
-import pakuImage from "../assets/Paku.png";
-import kuasImage from "../assets/Kuas.png";
+import hammerImage from "../assets/hammer.png";
+import pakuImage from "../assets/paku.png";
+import kuasImage from "../assets/kuas.png";
 import catImage from "../assets/cat.png";
 
 const CategoryPage = ({ cartItems, handleAddToCart }) => {

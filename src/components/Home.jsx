@@ -11,9 +11,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import kapakImage from "../assets/Kapak.png";
-import kuasImage from "../assets/Kuas.png";
-import pakuImage from "../assets/Paku.png";
-import hammerImage from "../assets/Hammer.png";
+import kuasImage from "../assets/kuas.png";
+import pakuImage from "../assets/paku.png";
+import hammerImage from "../assets/hammer.png";
 import emberImage from "../assets/ember.png";
 import pompaImage from "../assets/Pompa.png";
 import LinggisImage from "../assets/Linggis.png";

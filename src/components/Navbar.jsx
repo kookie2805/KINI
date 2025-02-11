@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import homeImage from '../assets/ihome.png';
-import tasImage from '../assets/Tas.png';
-import contactImage from '../assets/Contact.png';
+import tasImage from '../assets/tas.png';
+import contactImage from '../assets/contact.png';
 import userImage from '../assets/user.png';
 
 const Navbar = ({ onSearch }) => {
